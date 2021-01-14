@@ -1,8 +1,11 @@
+// This function creates the computer's pick
 function computerPlay() {
     let moves = ["Rock","Paper","Scissors"];
     return moves[Math.floor(Math.random() * 3)];
 }
 
+// This function compares the player and computer choices and returns a 
+// winner
 function playRound(playerSelection, computerSelection) {
     playerSelection = playerSelection.toLowerCase();
     computerSelection = computerSelection.toLowerCase();
@@ -32,29 +35,49 @@ function playRound(playerSelection, computerSelection) {
     }
 }
 
-function game(length) {
-    let finalScore = [0,0];
-    for (let i = 0; i < length; i++) {
-        let playerSelection = window.prompt('Rock, Paper, or Scissors?');
-        let winner = playRound(playerSelection, computerPlay());
-        if (winner[0] == -1) {
-            finalScore[1] += 1;
-        } else if (winner[0] == 1) {
-            finalScore[0] += 1;
-        } 
-        console.log(winner[1]);
-    }
-    return finalScore;
+// Initilize the score variables
+let playerScore = 0;
+let computerScore = 0;
+
+// This function plays a game after the player chooses their input and
+// returns the winner
+function playGame(e) {
+    let playerSelection = e.target.id;
+    let winner = playRound(playerSelection, computerPlay());
+    return winner;
 }
 
-let endGame = game(5);
-if (endGame[0] > endGame[1]) {
-    console.log('The final score was ' + endGame[0] + '-' + endGame[1] +
-    ', and you won!');
-} else if (endGame[0] < endGame[1]) {
-    console.log('The final score was ' + endGame[0] + '-' + endGame[1] +
-    ', and you lost!');
-} else {
-    console.log('The final score was ' + endGame[0] + '-' + endGame[1] +
-    ', and you tied!');
+// This function updates the scores and displays them on the screen
+function updateScore(val) {
+    if (val > 0) {
+        playerScore += 1;
+    } else if (val < 0) {
+        computerScore += 1;
+    }
+    document.querySelector('#score').innerText = `Player Score: ${playerScore}   Computer Score: ${computerScore}`
+    checkForWinner();
 }
+
+// This function checks to see if the player or computer has 5 points
+function checkForWinner() {
+    if (playerScore > 4 || computerScore > 4) {
+        if (playerScore > computerScore) {
+            document.querySelector('#score').innerText = 'You are the Winner!';
+        } else {
+            document.querySelector('#score').innerText = 'Sorry, the computer has won!';
+        }
+        playerScore = 0;
+        computerScore = 0;
+    }
+}
+
+// Get the container that contains the buttons 
+const container = document.querySelector('#player-choice');
+
+// Listen for a button press and then run a game, update the score, and
+// update the win text
+container.addEventListener('click', function(e) {
+    let winner = playGame(e);
+    updateScore(winner[0]);
+    document.querySelector('#results').innerText = winner[1];
+});
