@@ -1,28 +1,24 @@
-// add function
 function add(num1, num2) {
     return num1 + num2;
 }
-// subtract function
+
 function subtract(num1, num2) {
     return num1 - num2;
 }
 
-// multiply function
 function multiply(num1, num2) {
     return num1 * num2;
 }
 
-// divide function, needs a div/0 error throw
 function divide(num1, num2) {
     if (num2 === 0) {
-        return 'Nice try! If you divide by 0 the world would end!'
+        alert('Nice try! If you divide by 0 the world would end!')
+        return 0;
     } else {
         return num1 / num2;
     }
 }
 
-// operate function
-// takes two numbers and an operator and then calls one of the funcitons above
 function operate(num1, num2, operator) {
     switch(operator) {
         case '+':
@@ -38,11 +34,7 @@ function operate(num1, num2, operator) {
     }
 }
 
-// user can put in several digits and operators but should still reveal
-// the answer. 12 + 7 - 5 * 3 = 42. Functions should still only evaluate
-// 2 digits and one operand at a time. Does not follow normal math rules
-// should be done in the order its recieved, so when - is pressed after
-// 12 + 7, the next function should be 19 - 5. Round long decimals
+// Round long decimals
 
 let numberOne = null;
 let numberTwo = null;
@@ -56,7 +48,10 @@ container.addEventListener('click', function(e) {
         case '-':
         case 'x':
         case '/':
-            if (disp.textContent && !numberOne) {
+            if (!disp.textContent) {
+                numberOne = 0;
+                operator = e.target.textContent;
+            } else if (disp.textContent && !numberOne) {
                 numberOne = parseInt(disp.textContent);
                 operator = e.target.textContent;
                 disp.textContent = '';
@@ -64,17 +59,25 @@ container.addEventListener('click', function(e) {
                 operator = e.target.textContent;
                 disp.textContent = '';
             } else if (disp.textContent && numberOne && operator) {
+                console.log(parseInt(disp.textContent), numberOne, operator, parseInt(disp.textContent) === numberOne);
                 numberTwo = parseInt(disp.textContent);
                 numberOne = operate(numberOne, numberTwo, operator);
                 numberTwo = null;
-                operator = null;
+                operator = e.target.textContent;
+                console.log(parseInt(disp.textContent), numberOne, operator, parseInt(disp.textContent) === numberOne);
                 disp.textContent = numberOne;
             }
             break;
         case '=':
-            if (numberOne && operator) {
+            if ((numberOne === 0 || numberOne) && operator) {
                 if (disp.textContent === '0' || disp.textContent) {
                     numberTwo = parseInt(disp.textContent);
+                    numberOne = operate(numberOne, numberTwo, operator);
+                    numberTwo = null;
+                    operator = null;
+                    disp.textContent = numberOne;
+                } else if (!disp.textContent) {
+                    numberTwo = 0;
                     numberOne = operate(numberOne, numberTwo, operator);
                     numberTwo = null;
                     operator = null;
@@ -86,13 +89,13 @@ container.addEventListener('click', function(e) {
             clear();
             break;
         default:
-            console.log(parseInt(disp.textContent), numberOne, operator, parseInt(disp.textContent) === numberOne);
             if (parseInt(disp.textContent) === numberOne && operator) {
                 disp.textContent = '';
             }
             display(e.target.textContent);
             break;
     }
+    console.log(numberOne, numberTwo, operator);
 });
 
 const display_container = document.getElementById('display');
@@ -110,8 +113,6 @@ function clear() {
     numberTwo = null;
     disp.textContent = '';
 }
-// link = button to operate function, need to account for pressing = before
-// all args are input
 
 // EXTRA CREDIT: add . button and make it so only one can be input
 // EXTRA CREDIT: add a backspace button to undo numbers
