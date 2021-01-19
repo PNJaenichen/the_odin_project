@@ -19,28 +19,46 @@ function divide(num1, num2) {
     }
 }
 
+// TODO Round long decimals
 function operate(num1, num2, operator) {
     switch(operator) {
         case '+':
-            return add(num1, num2);
+            return truncate(add(num1, num2));
         case '-':
-            return subtract(num1, num2);
+            return truncate(subtract(num1, num2));
         case 'x':
-            return multiply(num1, num2);
+            return truncate(multiply(num1, num2));
         case '/':
-            return divide(num1, num2);
+            return truncate(divide(num1, num2));
         default:
             return 'An error occured'
     }
 }
 
-// Round long decimals
+function truncate(num) {
+    if (num.toString().length > 10) {
+        let newString = num.toString().slice(0,10);
+        return floatCheck(newString);
+    }
+    return floatCheck(num);
+}
+
+function floatCheck(str) {
+    if (typeof(str) !== 'number') {
+        if (str.indexOf('.') !== -1) {
+            return parseFloat(str);
+        } else {
+            return parseInt(str);
+        }
+    } else {
+        return str;
+    }
+}
 
 let numberOne = null;
 let numberTwo = null;
 let operator = null;
 
-// function that displays the button presses
 const container = document.querySelector('.grid-container');
 container.addEventListener('click', function(e) {
     switch (e.target.textContent) {
@@ -52,26 +70,24 @@ container.addEventListener('click', function(e) {
                 numberOne = 0;
                 operator = e.target.textContent;
             } else if (disp.textContent && !numberOne) {
-                numberOne = parseInt(disp.textContent);
+                numberOne = floatCheck(disp.textContent);
                 operator = e.target.textContent;
                 disp.textContent = '';
             } else if (disp.textContent && !operator) {
                 operator = e.target.textContent;
                 disp.textContent = '';
             } else if (disp.textContent && numberOne && operator) {
-                console.log(parseInt(disp.textContent), numberOne, operator, parseInt(disp.textContent) === numberOne);
-                numberTwo = parseInt(disp.textContent);
+                numberTwo = floatCheck(disp.textContent);
                 numberOne = operate(numberOne, numberTwo, operator);
                 numberTwo = null;
                 operator = e.target.textContent;
-                console.log(parseInt(disp.textContent), numberOne, operator, parseInt(disp.textContent) === numberOne);
                 disp.textContent = numberOne;
             }
             break;
         case '=':
             if ((numberOne === 0 || numberOne) && operator) {
                 if (disp.textContent === '0' || disp.textContent) {
-                    numberTwo = parseInt(disp.textContent);
+                    numberTwo = floatCheck(disp.textContent);
                     numberOne = operate(numberOne, numberTwo, operator);
                     numberTwo = null;
                     operator = null;
@@ -88,14 +104,32 @@ container.addEventListener('click', function(e) {
         case 'Clear':
             clear();
             break;
-        default:
+        case '.':
+            if (disp.textContent.indexOf('.') === -1) {
+                disp.textContent += e.target.textContent;
+            }
+            break;
+        case 'Back':
+            disp.textContent = disp.textContent.slice(0,disp.textContent.length - 1);
+            break;
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+        case '0':
             if (parseInt(disp.textContent) === numberOne && operator) {
                 disp.textContent = '';
             }
             display(e.target.textContent);
             break;
+        default:
+            break;
     }
-    console.log(numberOne, numberTwo, operator);
 });
 
 const display_container = document.getElementById('display');
@@ -114,8 +148,6 @@ function clear() {
     disp.textContent = '';
 }
 
-// EXTRA CREDIT: add . button and make it so only one can be input
-// EXTRA CREDIT: add a backspace button to undo numbers
 // EXTRA CREDIT: add keyboard support
-// EXTRA CREDIT: make it look nice
+
 

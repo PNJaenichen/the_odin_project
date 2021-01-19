@@ -9,7 +9,9 @@
         "one two three equal"
         "four five six equal"
         "seven eight nine equal"
-        "clear zero decimal equal";
+        "clear zero decimal backspace";
+    background-color: darkslategray;
+    width: 560px;
 }
   
 .display { grid-area: display; }
@@ -65,7 +67,11 @@
 #equal { grid-area: equal; }
 
 #clear { grid-area: clear; }
-  
+
+#backspace { 
+    grid-area: backspace; 
+}
+
 .grid {
     border: 1px solid black;
     display: flex;
@@ -78,4 +84,13 @@ button {
     height: 100%;
     width: 100%;
     font-size: 45px;
+    background-color: #fc654e;
+}
+
+.operator {
+    background-color: #fcbd4e;
+}
+  
+.digit {
+    background-color: #d3d4cb;
 }
