@@ -55,32 +55,40 @@ function floatCheck(str) {
     }
 }
 
-let numberOne = null;
-let numberTwo = null;
-let operator = null;
+function display(str) {
+    if (disp.textContent.length < 10) {
+        disp.textContent += str;
+    }
+}
 
-const container = document.querySelector('.grid-container');
-container.addEventListener('click', function(e) {
-    switch (e.target.textContent) {
+function clear() {
+    operator = null;
+    numberOne = null;
+    numberTwo = null;
+    disp.textContent = '';
+}
+
+function innerWorkings(text) {
+    switch (text) {
         case '+':
         case '-':
         case 'x':
         case '/':
             if (!disp.textContent) {
                 numberOne = 0;
-                operator = e.target.textContent;
+                operator = text;
             } else if (disp.textContent && !numberOne) {
                 numberOne = floatCheck(disp.textContent);
-                operator = e.target.textContent;
+                operator = text;
                 disp.textContent = '';
             } else if (disp.textContent && !operator) {
-                operator = e.target.textContent;
+                operator = text;
                 disp.textContent = '';
             } else if (disp.textContent && numberOne && operator) {
                 numberTwo = floatCheck(disp.textContent);
                 numberOne = operate(numberOne, numberTwo, operator);
                 numberTwo = null;
-                operator = e.target.textContent;
+                operator = text;
                 disp.textContent = numberOne;
             }
             break;
@@ -106,7 +114,7 @@ container.addEventListener('click', function(e) {
             break;
         case '.':
             if (disp.textContent.indexOf('.') === -1) {
-                disp.textContent += e.target.textContent;
+                disp.textContent += text;
             }
             break;
         case 'Back':
@@ -125,29 +133,61 @@ container.addEventListener('click', function(e) {
             if (parseInt(disp.textContent) === numberOne && operator) {
                 disp.textContent = '';
             }
-            display(e.target.textContent);
+            display(text);
             break;
         default:
             break;
     }
-});
+}
 
+let numberOne = null;
+let numberTwo = null;
+let operator = null;
+
+const container = document.querySelector('.grid-container');
 const display_container = document.getElementById('display');
 const disp = display_container.querySelector("span");
 
-function display(str) {
-    if (disp.textContent.length < 10) {
-        disp.textContent += str;
+container.addEventListener('click', function(e) {
+    innerWorkings(e.target.textContent);
+});
+window.addEventListener('keydown', function(e) {
+    var key = e.code;
+    console.log(key);
+    if (key === 'Digit1' || key === 'Numpad1') {
+        innerWorkings('1');
+    } else if (key === 'Digit2' || key === 'Numpad2') {
+        innerWorkings('2');
+    } else if (key === 'Digit3' || key === 'Numpad3') {
+        innerWorkings('3');
+    } else if (key === 'Digit4' || key === 'Numpad4') {
+        innerWorkings('4');
+    } else if (key === 'Digit5' || key === 'Numpad5') {
+        innerWorkings('5');
+    } else if (key === 'Digit6' || key === 'Numpad6') {
+        innerWorkings('6');
+    } else if (key === 'Digit7' || key === 'Numpad7') {
+        innerWorkings('7');
+    } else if (key === 'Digit8' || key === 'Numpad8') {
+        innerWorkings('8');
+    } else if (key === 'Digit9' || key === 'Numpad9') {
+        innerWorkings('9');
+    } else if (key === 'Digit0' || key === 'Numpad0') {
+        innerWorkings('0');
+    } else if (key === 'Period' || key === 'NumpadDecimal') {
+        innerWorkings('.');
+    } else if (key === 'NumpadAdd') {
+        innerWorkings('+');
+    } else if (key === 'NumpadSubtract') {
+        innerWorkings('-');
+    } else if (key === 'NumpadMultiply') {
+        innerWorkings('x');
+    } else if (key === 'NumpadDivide') {
+        innerWorkings('/');
+    } else if (key === 'Enter' || key === 'Equal' || key === 'NumpadEnter') {
+        innerWorkings('=');
+    } else if (key === 'Backspace') {
+        innerWorkings('Back');
     }
-}
-
-function clear() {
-    operator = null;
-    numberOne = null;
-    numberTwo = null;
-    disp.textContent = '';
-}
-
-// EXTRA CREDIT: add keyboard support
-
+});
 
