@@ -56,7 +56,7 @@ function makeBookForm() {
     pageIn.min = 1;
     pageIn.max = 99999;
     readIn.name = 'pages-read';
-    readIn.value = false;
+    readIn.checked = false;
     let submitButton = document.createElement('input');
     submitButton.id = 'submitBook';
     submitButton.type = 'submit';
@@ -79,7 +79,7 @@ function submission() {
         let title = document.getElementById('name').value;
         let author = document.getElementById('author').value;
         let pages = document.getElementById('pages').value;
-        let read = document.getElementById('read').value;
+        let read = document.getElementById('read').checked;
         addBookToLibrary(title, author, parseInt(pages), read);
         makeNewBookButton();
         printLibrary();
@@ -96,24 +96,24 @@ function makeNewBookButton() {
     newBook.addEventListener('click', makeBookForm);
 }
 
-addBookToLibrary('Rhythm of War', 'Brandon Sanderson', 1232, false);
-addBookToLibrary("A Wise Man's Fear",'Patrick Rothfuss',994,true);
-addBookToLibrary("Chesty", "Jon T. Hoffman", 676, false);
+// addBookToLibrary('Rhythm of War', 'Brandon Sanderson', 1232, false);
+// addBookToLibrary("A Wise Man's Fear",'Patrick Rothfuss',994,true);
+// addBookToLibrary("Chesty", "Jon T. Hoffman", 676, false);
 
 let library = document.getElementById('bookList');
 
 function printLibrary() {
-    library.innerText = "";
+    library.textContent = "";
     for (let i = 0; i < myLibrary.length; i++) {
         let element = document.createElement('div');
         element.classList.add('card');
-        element.innerText = ` ${myLibrary[i].title} `;
+        element.textContent = `${myLibrary[i].title}\r\n`;
         for (let [key, value] of Object.entries(myLibrary[i])) {
             if (key === 'title') {
                 continue;
             } else {
-                element.innerText += ` ${key}: ${value} `;
-                element.innerText += ' \r\n ';
+                element.textContent += ` ${key}: ${value} `;
+                element.textContent += ' \r\n ';
                 // let para = document.createElement('p');
                 // para.innerHTML = `${key}: ${value}`;
                 // element.append(para);
@@ -130,10 +130,10 @@ function printLibrary() {
 }
 
 library.addEventListener('click', function(e) {
-    let targetTitle = e.target.parentNode.innerText;
+    let targetTitle = e.target.parentNode.textContent.split('\r\n');
     let index = null;
     for (let i = 0; i < myLibrary.length; i++) {
-        if (myLibrary[i].title === targetTitle) {
+        if (myLibrary[i].title === targetTitle[0].trim()) {
             index = i;
         }
     }
