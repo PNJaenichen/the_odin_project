@@ -1,20 +1,26 @@
 let myLibrary = [];
 
-function Book(title, author, pages, read) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-}
-Book.prototype.info = function() { 
-    console.log(`${this.title} by ${this.author}, ${this.pages} pages, ${this.read ? 'read' : 'not read yet'}`);
+class Book {
+    constructor(title, author, pages, read) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.read = read;
+    }
+    info() {
+        console.log(`${this.title} by ${this.author}, ${this.pages} pages, ${this.read ? 'read' : 'not read yet'}`);
+    }
 }
 
-// TODO Function that adds user input to array
+function addBookToLibrary(title, author, pages, read) {
+    myLibrary.push(new Book(title, author, pages, read));
+}
+
 let addButton = document.getElementById('addBook');
 let addContainer = document.getElementById('container');
 
-addButton.addEventListener('click', function() {
+function makeBookForm() {
+    makeNewBookButton()
     let titleLabel = document.createElement('label');
     let authorLabel = document.createElement('label');
     let pageLabel = document.createElement('label');
@@ -50,7 +56,7 @@ addButton.addEventListener('click', function() {
     pageIn.min = 1;
     pageIn.max = 99999;
     readIn.name = 'pages-read';
-    readIn.value = true;
+    readIn.value = false;
     let submitButton = document.createElement('input');
     submitButton.id = 'submitBook';
     submitButton.type = 'submit';
@@ -64,10 +70,30 @@ addButton.addEventListener('click', function() {
     addContainer.appendChild(pageIn);
     addContainer.appendChild(readLabel);
     addContainer.appendChild(submitButton);
-})
+    submission();
+}
 
-function addBookToLibrary(title, author, pages, read) {
-    myLibrary.push(new Book(title, author, pages, read));
+function submission() {
+    let subBook = document.getElementById('submitBook');
+    subBook.onclick = function(){
+        let title = document.getElementById('name').value;
+        let author = document.getElementById('author').value;
+        let pages = document.getElementById('pages').value;
+        let read = document.getElementById('read').value;
+        addBookToLibrary(title, author, parseInt(pages), read);
+        makeNewBookButton();
+        printLibrary();
+    };
+}
+
+function makeNewBookButton() {
+    addContainer.innerHTML = '';
+    let aButt = document.createElement('button');
+    aButt.id = 'addBook';
+    aButt.innerHTML = 'New Book';
+    addContainer.appendChild(aButt);
+    let newBook = document.getElementById('addBook');
+    newBook.addEventListener('click', makeBookForm);
 }
 
 addBookToLibrary('Rhythm of War', 'Brandon Sanderson', 1232, false);
@@ -105,14 +131,12 @@ function printLibrary() {
 
 library.addEventListener('click', function(e) {
     let targetTitle = e.target.parentNode.innerText;
-    console.log(e.target.parentNode.innerHTML);
     let index = null;
     for (let i = 0; i < myLibrary.length; i++) {
         if (myLibrary[i].title === targetTitle) {
             index = i;
         }
     }
-    console.log(index);
     if (e.target.innerHTML === 'READ') {
         if (myLibrary[index].read) {
             myLibrary[index].read = false;
@@ -126,3 +150,5 @@ library.addEventListener('click', function(e) {
 });
 
 printLibrary();
+makeNewBookButton();
+
