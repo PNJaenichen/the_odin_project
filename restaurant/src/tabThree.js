@@ -1,15 +1,6 @@
-function tabOne() {
-    var mainElement = document.getElementById('content');
-    var headOne = document.createElement('h3');
-    var headTwo = document.createElement('h3');
-    headOne.textContent = 'Tab 2 - Menu';
-    headTwo.textContent = 'Tab 3 - Contact';
-    mainElement.appendChild(headOne);
-    mainElement.appendChild(headTwo);
-}
-
 function tabThree() {
     var mainElement = document.getElementById('content');
+    mainElement.innerHTML = "";
     var headOne = document.createElement('h3');
     var paraOne = document.createElement('p');
     var headTwo = document.createElement('h3');
@@ -23,3 +14,5 @@ function tabThree() {
     mainElement.appendChild(headTwo);
     mainElement.appendChild(paraTwo);    
 }
+
+module.exports = tabThree;
